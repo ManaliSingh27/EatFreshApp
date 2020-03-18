@@ -1,4 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="false" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19B88" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Eatery" representedClassName="Eatery" syncable="YES">
+        <attribute name="eateryTypes" optional="YES" attributeType="Transformable" customClassName="[String]"/>
+        <attribute name="iconUrl" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="placeId" optional="YES" attributeType="String"/>
+        <attribute name="rating" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="userRatingTotal" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="vicinity" optional="YES" attributeType="String"/>
+        <relationship name="openHrs" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="OpeningHours" inverseName="eatery" inverseEntity="OpeningHours"/>
+        <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Photos" inverseName="eatery" inverseEntity="Photos"/>
+        <relationship name="reviews" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Review" inverseName="eatery" inverseEntity="Review"/>
+    </entity>
+    <entity name="OpeningHours" representedClassName="OpeningHours" syncable="YES">
+        <attribute name="openNow" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="eatery" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Eatery" inverseName="openHrs" inverseEntity="Eatery"/>
+    </entity>
+    <entity name="Photos" representedClassName="Photos" syncable="YES">
+        <attribute name="height" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="photoRef" optional="YES" attributeType="String"/>
+        <attribute name="width" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="eatery" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Eatery" inverseName="photos" inverseEntity="Eatery"/>
+    </entity>
+    <entity name="Review" representedClassName="Review" syncable="YES">
+        <attribute name="authorName" optional="YES" attributeType="String"/>
+        <attribute name="profilePicUrl" optional="YES" attributeType="String"/>
+        <attribute name="rating" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="text" optional="YES" attributeType="String"/>
+        <relationship name="eatery" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Eatery" inverseName="reviews" inverseEntity="Eatery"/>
+    </entity>
+    <elements>
+        <element name="Eatery" positionX="243.703125" positionY="-43.96875" width="128" height="193"/>
+        <element name="OpeningHours" positionX="-54" positionY="27" width="128" height="73"/>
+        <element name="Photos" positionX="44.7734375" positionY="176.21875" width="128" height="103"/>
+        <element name="Review" positionX="269.26953125" positionY="190.7734375" width="128" height="118"/>
+    </elements>
 </model>
