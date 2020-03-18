@@ -8,5 +8,5 @@
 
 
 struct Constants {
-    static let PLACES_API_KEY = "AIzaSyAgAhb_e6I-XynxTbLibWRZzutiL-Oim0I"
+    static let PLACES_API_KEY = ""
 }
