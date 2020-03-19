@@ -47,7 +47,18 @@ class EateriesTableViewController: UITableViewController {
         configureView()
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
-        
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+                case .notDetermined, .restricted, .denied:
+                    print("No access")
+                case .authorizedAlways, .authorizedWhenInUse:
+                    print("Access")
+                @unknown default:
+                break
+            }
+            } else {
+            Utility.showAlert(title: "Error", message: "Location services are not enabled", vc: self)
+        }
         // if previously user has allowed the location permission, then request location
         if(CLLocationManager.authorizationStatus() == .authorizedWhenInUse || CLLocationManager.authorizationStatus() == .authorizedAlways){
             locationManager.requestLocation()

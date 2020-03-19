@@ -185,6 +185,9 @@ class EateriesDetailsAPIManager
     func downloadReviewsData(vc:EateriesDetailsTableViewController)
     {
         let placeId = vc.selectedEatery!.placeId
+        guard vc.selectedEatery?.placeId != nil else{
+            return
+        }
         let urlString = "https://maps.googleapis.com/maps/api/place/details/json?place_id=\(placeId!)&fields=place_id,reviews&key=\(Constants.PLACES_API_KEY)"
         let placesUrl = URL(string: urlString)
         let networkManager = NetworkManager(session: URLSession.shared)
