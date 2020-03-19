@@ -73,7 +73,7 @@ class NetworkManager {
                 completion(.Success(cachedImage))
             } else {
                 let image = UIImage.init(data: data)
-               // self?.imageCache.setObject(image!, forKey: url.absoluteString as NSString)
+                self?.imageCache.setObject(image!, forKey: url.absoluteString as NSString)
                 completion(.Success(image!))
             }
             
