@@ -18,7 +18,7 @@ class EateriesTableViewControllerTests: XCTestCase {
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        self.viewControllerUnderTest = storyboard.instantiateViewController(withIdentifier: "EateriesTableViewController") as! EateriesTableViewController
+        self.viewControllerUnderTest = storyboard.instantiateViewController(withIdentifier: "EateriesTableViewController") as? EateriesTableViewController
         
         locationMgr = CLLocationManager()
         self.viewControllerUnderTest.locationManager = locationMgr

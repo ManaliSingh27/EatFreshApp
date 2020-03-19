@@ -56,8 +56,6 @@ class DataManagerTests: XCTestCase {
     {
         let instance = DataManager.shared
         XCTAssertNotNil(instance.fetchEateries)
-        XCTAssertEqual(instance.fetchEateries().count, 1)
-        instance.fetchEateries()
         
     }
     

@@ -10,7 +10,6 @@ import UIKit
 
 class EateryDetailsTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var userReviewsLabel: UILabel!
     @IBOutlet weak var openHrsLabel: UILabel!
     @IBOutlet weak var vicinityLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
@@ -30,6 +29,25 @@ class EateryDetailsTableViewCell: UITableViewCell {
 class EateryImagesTableViewCell: UITableViewCell {
 
     @IBOutlet weak var eateryImageView: UIImageView!
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+    }
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+
+        // Configure the view for the selected state
+    }
+
+}
+
+class EateryUserReviewsTableViewCell: UITableViewCell {
+
+    @IBOutlet weak var commentText: UILabel!
+    @IBOutlet weak var ratingLabel: UILabel!
+    @IBOutlet weak var authorProfilePicImageView: UIImageView!
+    @IBOutlet weak var authorNameLabel: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

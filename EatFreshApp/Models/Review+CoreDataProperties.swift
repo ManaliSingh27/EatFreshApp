@@ -22,5 +22,4 @@ extension Review {
     @NSManaged public var rating: Double
     @NSManaged public var text: String?
     @NSManaged public var eatery: Eatery?
-
 }

@@ -36,6 +36,7 @@ class EateriesDetailsViewControllerTests: XCTestCase {
          eateryObj.userRatingTotal = 230
          eateryObj.vicinity = "Test vicinity"
          eateryObj.iconUrl = "test url"
+        eateryObj.placeId = "test"
          let OpenHrsObj  = OpeningHours(context: context)
         // OpenHrsObj.openNow = true
          OpenHrsObj.eatery = eateryObj
@@ -44,6 +45,12 @@ class EateriesDetailsViewControllerTests: XCTestCase {
          photoObj.height = 320
          photoObj.photoRef = "test"
          photoObj.eatery = eateryObj
+        
+        let reviewsObj  = Review(context: context)
+        reviewsObj.authorName = "test author"
+        reviewsObj.text = "test description"
+        eateryObj.reviews = [reviewsObj]
+
         
         return eateryObj
     }
@@ -79,22 +86,33 @@ class EateriesDetailsViewControllerTests: XCTestCase {
        let expectedReuseIdentifier = "detailsCell"
        XCTAssertEqual(actualReuseIdentifer, expectedReuseIdentifier)
     
-    let cell1 = viewControllerUnderTest.tableView(viewControllerUnderTest.tableView, cellForRowAt: IndexPath(row: 1, section: 0)) as? EateryImagesTableViewCell
+    let cell1 = viewControllerUnderTest.tableView(viewControllerUnderTest.tableView, cellForRowAt: IndexPath(row: 0, section: 1)) as? EateryImagesTableViewCell
     let actualReuseIdentifer1 = cell1?.reuseIdentifier
     let expectedReuseIdentifier1 = "imageCell"
     XCTAssertEqual(actualReuseIdentifer1, expectedReuseIdentifier1)
+    
+    let cell2 = viewControllerUnderTest.tableView(viewControllerUnderTest.tableView, cellForRowAt: IndexPath(row: 0, section: 2)) as? EateryUserReviewsTableViewCell
+      let actualReuseIdentifer2 = cell2?.reuseIdentifier
+      let expectedReuseIdentifier2 = "reviewCell"
+      XCTAssertEqual(actualReuseIdentifer2, expectedReuseIdentifier2)
    }
    
    func testTableCellHasCorrectLabelText() {
        let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.tableView, cellForRowAt: IndexPath(row: 0, section: 0)) as? EateryDetailsTableViewCell
        XCTAssertNotNil(cell?.nameLabel)
        XCTAssertNotNil(cell?.openHrsLabel)
-       XCTAssertNotNil(cell?.userReviewsLabel)
        XCTAssertNotNil(cell?.vicinityLabel)
     
     
-    let cell1 = viewControllerUnderTest.tableView(viewControllerUnderTest.tableView, cellForRowAt: IndexPath(row: 1, section: 0)) as? EateryImagesTableViewCell
+    let cell1 = viewControllerUnderTest.tableView(viewControllerUnderTest.tableView, cellForRowAt: IndexPath(row: 0, section: 1)) as? EateryImagesTableViewCell
     XCTAssertNotNil(cell1?.eateryImageView)
+    
+    let cell2 = viewControllerUnderTest.tableView(viewControllerUnderTest.tableView, cellForRowAt: IndexPath(row: 0, section: 2)) as? EateryUserReviewsTableViewCell
+      XCTAssertNotNil(cell2?.authorNameLabel)
+    XCTAssertNotNil(cell2?.commentText)
+    XCTAssertNotNil(cell2?.authorProfilePicImageView)
+    XCTAssertNotNil(cell2?.ratingLabel)
+
    
        
       

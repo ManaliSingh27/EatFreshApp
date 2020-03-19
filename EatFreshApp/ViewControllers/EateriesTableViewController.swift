@@ -19,6 +19,7 @@ class EateriesTableViewController: UITableViewController {
     let eateriesDataManager : EateriesDataManager = EateriesDataManager()
     let eateriesAPIManager : EateriesAPIManager = EateriesAPIManager()
     let searchController = UISearchController(searchResultsController: nil)
+    let eateriesRefreshControl : UIRefreshControl = UIRefreshControl()
     
     var filteredEateries: [Eatery] = []
     
@@ -38,7 +39,7 @@ class EateriesTableViewController: UITableViewController {
         return searchController.isActive && !isSearchBarEmpty
     }
     
-   
+    // MARK: - View
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,6 +54,8 @@ class EateriesTableViewController: UITableViewController {
         }
     }
     
+    
+    // Configures the View
     private func configureView()
     {
         searchController.searchResultsUpdater = self
@@ -62,8 +65,19 @@ class EateriesTableViewController: UITableViewController {
         definesPresentationContext = true
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
+        
+        eateriesRefreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        eateriesRefreshControl.addTarget(self, action: #selector(refreshData), for: .valueChanged)
+        tableView.addSubview(eateriesRefreshControl)
     }
     
+    // MARK: - Pull To Refresh Method
+    /// Refreshes Data on Pull To Refresh
+    @objc func refreshData(refreshControl: UIRefreshControl) {
+        locationManager.requestLocation()
+        eateriesRefreshControl.endRefreshing()
+        
+    }
     
     // MARK: - Table view data source
     
@@ -209,12 +223,20 @@ class EateriesAPIManager
     func downloadEateriesData(latitude:CLLocationDegrees, longitude:CLLocationDegrees, vc:EateriesTableViewController)
     {
         
-        let urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=\(latitude),\(longitude)&radius=1500&type=restaurant&key=\(Constants.PLACES_API_KEY)"
-        //  let urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=\(latitude),\(longitude)&radius=1500&type=restaurant&key=AIzaSyAgAhb_e6I-XynxTbLibWRZzutiL-Oim0I"
+        /*   let path = Bundle.main.path(forResource: "Test", ofType: "json")
+         do{
+         let data = try Data(contentsOf: URL(fileURLWithPath: path!), options: .mappedIfSafe)
+         parseAndSaveData(data: data, vc:vc)
+         }
+         catch{
+         
+         }*/
         
+        
+        let urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=\(latitude),\(longitude)&radius=1500&type=restaurant&key=\(Constants.PLACES_API_KEY)"
         let placesUrl = URL(string: urlString)
         let networkManager = NetworkManager(session: URLSession.shared)
-        networkManager.downloadData(url: placesUrl!, completion: {(result) in
+        networkManager.downloadData(url: placesUrl!, completion: {[weak self](result) in
             DispatchQueue.main.async {
                 Utility.removeActivityIndicator(view: vc.view, activityIndicator: vc.activityIndicator)
             }
@@ -224,31 +246,36 @@ class EateriesAPIManager
                 DispatchQueue.main.async
                     {
                         do{
-                            DataManager.shared.clearStorage()
-                            let decoder = JSONDecoder()
-                            let appDelegate : AppDelegate = UIApplication.shared.delegate as! AppDelegate
-                            decoder.userInfo[CodingUserInfoKey.context!] = appDelegate.persistentContainer.viewContext
-                            do{
-                                let results = try decoder.decode(Results.self, from: data)
-                                print(results)
-                                
-                                DataManager.shared.saveMainContext()
-                                vc.eateries = (vc.eateriesDataManager.fetchEateries())
-                            }
-                            catch{
-                                print("Error")
-                            }
+                            self!.parseAndSaveData(data: data, vc:vc)
+                            
                         }
                 }
             case .Error(let error):
                 DispatchQueue.main.async {
                     Utility.showAlert(title: "Error", message: error, vc: vc)
                 }
-                
             }
         })
     }
     
+    
+    private func parseAndSaveData(data : Data, vc:EateriesTableViewController)
+    {
+        DataManager.shared.clearStorage()
+        let decoder = JSONDecoder()
+        let appDelegate : AppDelegate = UIApplication.shared.delegate as! AppDelegate
+        decoder.userInfo[CodingUserInfoKey.context!] = appDelegate.persistentContainer.viewContext
+        do{
+            let results = try decoder.decode(Results.self, from: data)
+            print(results)
+            
+            DataManager.shared.saveMainContext()
+            vc.eateries = (vc.eateriesDataManager.fetchEateries())
+        }
+        catch{
+            print("Error")
+        }
+    }
     
     /// Downloads Photo from the url
     /// - parameter photoUrl: url from when image is to be downloaded
